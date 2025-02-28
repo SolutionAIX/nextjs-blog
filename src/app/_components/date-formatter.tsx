@@ -4,9 +4,13 @@ type Props = {
   dateString: string;
 };
 
-const DateFormatter = ({ dateString }: Props) => {
-  const date = parseISO(dateString);
-  return <time dateTime={dateString}>{format(date, "LLLL	d, yyyy")}</time>;
-};
+export default function DateFormatter({ dateString }: { dateString?: string | null }) {
+  if (!dateString) return <span>Invalid Date</span>; // Handle null/undefined
 
-export default DateFormatter;
+  try {
+    return <time dateTime={dateString}>{format(parseISO(dateString), "LLLL d, yyyy")}</time>;
+  } catch (error) {
+    console.error("Invalid date format:", dateString, error);
+    return <span>Invalid Date</span>;
+  }
+}
